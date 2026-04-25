@@ -1,0 +1,5 @@
+{
+  "version": 2,
+  "framework": "tanstack-start",
+  "installCommand": "npm install"
+}

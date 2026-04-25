@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: "Roboto", "Inter", system-ui, sans-serif;
+  --font-roboto: "Roboto", sans-serif;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-brand: var(--brand);
+  --color-panel: var(--panel);
+  --color-panel-muted: var(--panel-muted);
+  --color-bubble-in: var(--bubble-in);
+  --color-bubble-out: var(--bubble-out);
+  --color-bubble-out-foreground: var(--bubble-out-foreground);
+  --color-note: var(--note);
+  --color-label-blue: var(--label-blue);
+  --color-success: var(--success);
+
+  --color-intro-bg: var(--intro-bg);
+  --color-intro-surface: var(--intro-surface);
+  --color-intro-blue: var(--intro-blue);
+  --color-intro-cyan: var(--intro-cyan);
+  --color-intro-violet: var(--intro-violet);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(0.985 0.002 250);
+  --foreground: oklch(0.18 0.02 260);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.18 0.02 260);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0.02 260);
+
+  --primary: oklch(0.55 0.22 260);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.96 0.01 250);
+  --secondary-foreground: oklch(0.2 0.02 260);
+  --muted: oklch(0.96 0.008 250);
+  --muted-foreground: oklch(0.5 0.02 260);
+  --accent: oklch(0.95 0.02 260);
+  --accent-foreground: oklch(0.2 0.02 260);
+  --destructive: oklch(0.6 0.22 25);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.92 0.008 250);
+  --input: oklch(0.92 0.008 250);
+  --ring: oklch(0.55 0.22 260);
+
+  /* BOXpad brand */
+  --brand: oklch(0.58 0.23 255);
+  --panel: oklch(1 0 0);
+  --panel-muted: oklch(0.98 0.005 255);
+
+  --bubble-in: oklch(0.94 0.005 255);
+  --bubble-out: oklch(0.92 0.04 270);
+  --bubble-out-foreground: oklch(0.3 0.05 270);
+  --note: oklch(0.97 0.08 90);
+  --label-blue: oklch(0.7 0.15 240);
+  --success: oklch(0.65 0.18 150);
+
+  /* Intro screen */
+  --intro-bg: oklch(0.13 0.03 262);
+  --intro-surface: oklch(0.16 0.035 260);
+  --intro-blue: oklch(0.62 0.22 253);
+  --intro-cyan: oklch(0.84 0.14 210);
+  --intro-violet: oklch(0.32 0.1 286);
+}
+
+.dark {
+  --background: oklch(0.16 0.04 260);
+  --foreground: oklch(0.98 0.003 250);
+  --card: oklch(0.2 0.04 260);
+  --card-foreground: oklch(0.98 0.003 250);
+  --primary: oklch(0.65 0.22 260);
+  --primary-foreground: oklch(0.16 0.04 260);
+  --border: oklch(1 0 0 / 10%);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer utilities {
+  .skeleton-shimmer {
+    background: linear-gradient(
+      90deg,
+      oklch(0.93 0.005 250) 0%,
+      oklch(0.96 0.005 250) 50%,
+      oklch(0.93 0.005 250) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.6s ease-in-out infinite;
+    border-radius: 6px;
+  }
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  .hex {
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: oklch(0.85 0.01 250);
+    border-radius: 3px;
+  }
+}
