@@ -1,5 +1,6 @@
 {
   "version": 2,
-  "framework": "tanstack-start",
-  "installCommand": "npm install"
+  "buildCommand": "npm run vercel-build",
+  "outputDirectory": ".vercel/output",
+  "framework": "tanstack-start"
 }
