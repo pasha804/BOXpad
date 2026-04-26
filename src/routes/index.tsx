@@ -7,6 +7,8 @@ import { ConversationList, type Conversation } from "@/components/boxpad/Convers
 import { ChatWindow, type Message } from "@/components/boxpad/ChatWindow";
 import { DetailsPanel, type Contact } from "@/components/boxpad/DetailsPanel";
 import { cn } from "@/lib/utils";
+import { useFetch } from "@/hooks/useFetch";
+import type { User } from "@/types";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -119,6 +121,10 @@ type MobileView = "list" | "chat";
 // ─── Main component ──────────────────────────────────────────────────────────
 
 function Index() {
+  const { data: apiData, loading: apiLoading, error: apiError, refetch: refetchApi } = useFetch<{ users: User[] }>(
+    "https://dummyjson.com/users?limit=10"
+  );
+
   const [showIntroScreen, setShowIntroScreen] = useState(true);
   const [showAppSkeleton, setShowAppSkeleton] = useState(true);
   const [dataReady, setDataReady] = useState(false);
@@ -147,69 +153,37 @@ function Index() {
     };
   }, []);
 
-  // ── API fetch (dummyjson.com/users) ──────────────────────────────────────
+  // ── API data processing ───────────────────────────────────────────────
 
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const res = await fetch("https://dummyjson.com/users?limit=10");
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        if (cancelled) return;
+    if (apiError) {
+      setFetchError(apiError);
+      return;
+    }
 
-        const convs: Conversation[] = data.users.map(
-          (u: { id: number; firstName: string; lastName: string }, i: number) => ({
-            id: u.id,
-            // First contact is always Olivia to match the Figma design
-            name: i === 0 ? "Olivia Mckinsey" : `${u.firstName} ${u.lastName}`,
-            preview: PREVIEWS[i] ?? "Hello there!",
-            time: TIMES[i] ?? "—",
-            avatarColor: AVATAR_COLORS[i % AVATAR_COLORS.length],
-          }),
-        );
-
-        setTimeout(() => {
-          if (cancelled) return;
-          setConversations(convs);
-          setActiveId(convs[0].id);
-          // Contact details for Olivia (first conversation)
-          setContact({
-            firstName: "Olivia",
-            lastName: "Mckinsey",
-            phone: "+1 (312) 555-0134",
-            email: "olivia.Mckinsey@gmail.com",
-          });
-          setDataReady(true);
-        }, 250);
-      } catch (err) {
-        if (cancelled) return;
-        console.error("API fetch failed, using fallback data:", err);
-        setFetchError("Could not load contacts. Using cached data.");
-
-        // Graceful fallback — app still works
-        const convs: Conversation[] = PREVIEWS.map((p, i) => ({
-          id: i + 1,
-          name: i === 0 ? "Olivia Mckinsey" : `Contact ${i + 1}`,
-          preview: p,
-          time: TIMES[i],
+    if (apiData?.users) {
+      const convs: Conversation[] = apiData.users.map(
+        (u: User, i: number) => ({
+          id: u.id,
+          name: i === 0 ? "Olivia Mckinsey" : `${u.firstName} ${u.lastName}`,
+          preview: PREVIEWS[i] ?? "Hello there!",
+          time: TIMES[i] ?? "—",
           avatarColor: AVATAR_COLORS[i % AVATAR_COLORS.length],
-        }));
-        setConversations(convs);
-        setActiveId(convs[0].id);
-        setContact({
-          firstName: "Olivia",
-          lastName: "Mckinsey",
-          phone: "+1 (312) 555-0134",
-          email: "olivia.Mckinsey@gmail.com",
-        });
-        setDataReady(true);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+        }),
+      );
+
+      setConversations(convs);
+      setActiveId(convs[0].id);
+      setContact({
+        firstName: "Olivia",
+        lastName: "Mckinsey",
+        phone: "+1 (312) 555-0134",
+        email: "olivia.Mckinsey@gmail.com",
+      });
+      setDataReady(true);
+      setFetchError(null);
+    }
+  }, [apiData, apiError]);
 
   // ── Derived state ─────────────────────────────────────────────────────────
 
