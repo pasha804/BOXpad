@@ -238,7 +238,7 @@ function Index() {
   // ── Shared dashboard layout helper ────────────────────────────────────────
 
   const renderDashboard = (loaded: boolean, convs: Conversation[], selId: number | null) => (
-    <div className="flex h-full flex-col bg-background overflow-hidden">
+    <div className="flex h-screen flex-col bg-background overflow-hidden">
       <TopBar
         onOpenSidebar={() => setMobileSidebarOpen(true)}
         onOpenDetails={() => setMobileDetailsOpen(true)}
@@ -326,12 +326,12 @@ function Index() {
   // ── Skeleton phase ────────────────────────────────────────────────────────
 
   if (!showLoadedApp) {
-    return <div className="h-screen overflow-hidden">{renderDashboard(false, [], null)}</div>;
+    return <div className="min-h-screen overflow-hidden">{renderDashboard(false, [], null)}</div>;
   }
 
   // ── Loaded dashboard ──────────────────────────────────────────────────────
 
   return (
-    <div className="h-screen overflow-hidden">{renderDashboard(true, conversations, activeId)}</div>
+    <div className="min-h-screen overflow-hidden">{renderDashboard(true, conversations, activeId)}</div>
   );
 }
